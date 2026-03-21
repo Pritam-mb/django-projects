@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-users me-3"></i>Employee Management System</h1>
+        <p>Manage your workforce with style and efficiency</p>
+
+        {% if employees %}
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-light mb-0"><i class="fas fa-table me-2"></i>Employee Directory</h3>
+                <a href="/employee/" class="btn btn-primary">
+                    <i class="fas fa-eye me-2"></i>View All Employees
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"><i class="fas fa-hashtag me-2"></i>#</th>
+                            <th scope="col"><i class="fas fa-user me-2"></i>Full Name</th>
+                            <th scope="col"><i class="fas fa-briefcase me-2"></i>Department</th>
+                            <th scope="col"><i class="fas fa-dollar-sign me-2"></i>Salary</th>
+                            <th scope="col"><i class="fas fa-cogs me-2"></i>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-circle me-2">
+                                        {{ employee.name|first|upper }}
+                                    </div>
+                                    {{ employee.name }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge department-badge">{{ employee.department }}</span>
+                            </td>
+                            <td>${{ employee.salary|floatformat:0 }}</td>
+                            <td>
+                                <a href="/employee/{{ employee.pk }}/" class="btn btn-primary btn-sm me-2">
+                                    <i class="fas fa-eye me-1"></i>View
+                                </a>
+                                <a href="/admin/employee/employee/{{ employee.pk }}/change/" class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-muted mb-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Showing {{ employees|length }} employee{{ employees|length|pluralize }}
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="/admin/" class="btn btn-secondary">
+                        <i class="fas fa-shield-alt me-2"></i>Admin Panel
+                    </a>
+                    <a href="/employee/" class="btn btn-primary">
+                        <i class="fas fa-list me-2"></i>Full Employee List
+                    </a>
+                </div>
+            </div>
+
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-users fa-4x mb-4 text-muted"></i>
+                <h3 class="text-muted">No employees found</h3>
+                <p class="text-muted mb-4">Start by adding your first employee to the system.</p>
+                <a href="/admin/employee/employee/add/" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add First Employee
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <style>
+        .avatar-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .department-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 0.4rem 0.8rem;
+        }
+
+        .text-muted {
+            color: #9ca3af !important;
+        }
+
+        h3 {
+            color: #e5e7eb !important;
+            font-weight: 600;
+        }
+
+        .gap-3 {
+            gap: 1rem !important;
+        }
+    </style>
+</body>
+</html>

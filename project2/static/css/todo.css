@@ -1,0 +1,23 @@
+/* .container{
+    height: 150px;
+    width: 250px;
+    /* border: 2px solid red; */
+   
+    /* border-radius: 10px; */
+    /* background-color: #f8f9fa; */
+    /* margin: 20px auto; */
+/* } */
+
+
+
+.box input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* h1 {
+    color: #333;
+    margin-bottom: 30px;
+} */ 
