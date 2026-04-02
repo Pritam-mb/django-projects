@@ -16,16 +16,21 @@
         </h1>
 
         <!-- Add Task Form -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="box d-flex gap-3 align-items-center">
-                    <input type="text" class="form-control" placeholder="Enter a new task...">
-                    <button class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add
-                    </button>
-                </div>
-            </div>
-        </div>
+         <form action="{% url 'add_task' %}" method="post">
+             {% csrf_token %}
+             <div class="card mb-4">
+                 <div class="card-body">
+                     <div class="box d-flex gap-3 align-items-center">
+                         <input type="text" class="form-control" placeholder="Enter a new task..." name="task">
+                         <button type="submit" class="btn btn-primary">
+                             <i class="fas fa-plus"></i> Add
+                         </button>
+                     </div>
+                 </div>
+             </div>
+
+
+         </form>
 
         <!-- Task List -->
         <div class="card">

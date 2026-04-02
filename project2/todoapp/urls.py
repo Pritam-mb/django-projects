@@ -2,5 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='home'),  # Handles home page with task list
+   # Handles home page with task list
+    # path('', views.home, name='home'), 
+
+    path('addtask/',views.add_task, name='add_task')
 ]
