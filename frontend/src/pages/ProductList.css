@@ -1,0 +1,40 @@
+.product-list-container {
+  padding: 60px 20px;
+  background-color: #0f172a;
+  min-height: 100vh;
+}
+
+.product-list-title {
+  text-align: center;
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(to right, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 60px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  letter-spacing: -1px;
+}
+
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.loading-state {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 1.2rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  margin-top: 100px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
