@@ -21,3 +21,13 @@ export const fetchCategories = async () => {
     return [];
   }
 };
+export const product_details = async (id) => {
+  try {
+    const response = await fetch(`${BASE_URL}/api/products/${id}`);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return [];
+  }
+}

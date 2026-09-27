@@ -1,11 +1,18 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProductList from "./pages/ProductList";
-import "./index.css"; // Ensure global styles apply if needed
+import Product_detail from "./pages/Product_detail";
+import "./index.css"; 
 
 export default function App() {
   return (
-    <div className="app-root">
-      <ProductList />
-    </div>
+    <BrowserRouter>
+      <div className="app-root">
+        <Routes>
+          <Route path="/" element={<ProductList />} />
+          <Route path="/product/:id" element={<Product_detail />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
