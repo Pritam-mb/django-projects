@@ -26,7 +26,7 @@ export default function Product_detail() {
             <button onClick={() => navigate(-1)} style={{ marginBottom: '40px', padding: '10px 20px', cursor: 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: '#fff', fontWeight: 'bold' }}>&larr; Back to Fleet</button>
 
             <div style={{ display: 'flex', gap: '50px', flexWrap: 'wrap' }}>
-                <img src={imageUrl} alt={product.name} style={{ width: '500px', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }} />
+                <img src={`${product.image}`} alt={product.name} style={{ width: '500px', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }} />
                 <div style={{ maxWidth: '600px' }}>
                     <h1 style={{ fontSize: '3.5rem', margin: '0 0 20px', background: 'linear-gradient(to right, #38bdf8, #818cf8)', WebkitBackgroundClip: 'text', color: 'transparent' }}>{product.name}</h1>
                     <p style={{ fontSize: '1.2rem', color: '#94a3b8', marginBottom: '30px', lineHeight: '1.6' }}>{product.description}</p>

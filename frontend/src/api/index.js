@@ -31,3 +31,5 @@ export const product_details = async (id) => {
     return [];
   }
 }
+
+export const addProduct = async(product)
