@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { addProduct, product_details } from "../api";
-
+import {useCart} from "../context/CardContext.jsx";
 export default function Product_detail() {
+    const { addToCart } = useCart();
     const { id } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
@@ -22,8 +23,10 @@ export default function Product_detail() {
     const imageUrl = product.image ? `http://localhost:8000${product.image}` : 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=600';
 const handleAddToCart = (product) => {
    const pro= addProduct(product);
+   addToCart(product);
    if(pro){
     alert(`${product.name} added to cart!`);
+    addpr
    }else{
     alert("Could not add product to cart.");
    }

@@ -8,6 +8,6 @@ urlpatterns = [
     path('products/<int:pk>/',get_product_details),
     path('cart/',get_cart),
     path('add-to-cart/',add_to_cart),
-    # path('cartitem/',get_cart_item),
+    # path('cart/',get_cart),
     path('delete-product/<int:pk>/',delete_product),
 ]

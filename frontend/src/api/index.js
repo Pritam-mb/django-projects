@@ -32,28 +32,30 @@ export const product_details = async (id) => {
   }
 }
 
-export const addProduct = async(product)=>{
-  try{
-    const productId = product.id;
-    const product = await fetch(`${BASE_URL}/api/products/${productId}/`)
-    if (!product.ok) throw new Error('Network response was not ok');
-    const response = await fetch(`${BASE_URL}/api/cart/add/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ product_id: productId ,
-        quantity: 1
-      }),
-    });
-   if (response.ok) {
-        setMessage(`${product.name} added to cart!`);
-        return response.json();
+export const addProduct = async (product) => {
+  const response = await fetch(`${BASE_URL}/api/add-to-cart/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      product_id: product.id,
+      quantity: 1,
+    }),
+  });
 
-    } else {
-        setMessage("Could not add product to cart.");
-    }
-  }catch(error){
-    console.error('Error adding product:', error);
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.detail || 'Could not add product to cart.');
   }
+
+  return data;
+};
+export const fetchCart = async()=>{
+  const response = await fetch(`${BASE_URL}/api/cart/`, {
+    credentials: 'include',
+  });
+  if (!response.ok) throw new Error('Network response was not ok');
+  return await response.json();
 }
