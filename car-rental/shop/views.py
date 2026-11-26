@@ -41,25 +41,23 @@ def add_to_cart(request):
     quantity = int(request.data.get('quantity', 1))
     try:
         product = Product.objects.get(id=product_id)
-        if not request.session.session_key:
-            request.session.create()
-        cart, created = Cart.objects.get_or_create(session_key=request.session.session_key)
-        
-        # We must provide price and subtotal because they are required in models.py
-        price = product.price
-        subtotal = price * quantity
-        cart_item = CartItem.objects.create(
-            cart=cart, 
-            product=product, 
-            quantity=quantity, 
-            price=price, 
-            subtotal=subtotal
-        )
-        
-        serializer = CartItemSerializer(cart_item)
-        return Response(serializer.data)
     except Product.DoesNotExist:
         return Response({"detail": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if not request.session.session_key:
+        request.session.create()
+    cart, _ = Cart.objects.get_or_create(session_key=request.session.session_key)
+    item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        product=product,
+        defaults={'quantity': quantity, 'price': product.price, 'subtotal': product.price * quantity},
+    )
+    if not created:
+        item.quantity += quantity
+        item.subtotal = item.price * item.quantity
+        item.save()
+    return Response(CartItemSerializer(item).data)
+
 @api_view(['POST'])
 def delete_product(request,pk):
     try:
@@ -67,3 +65,12 @@ def delete_product(request,pk):
         return Response({"detail": "Product deleted"}, status=status.HTTP_200_OK)
     except Product.DoesNotExist:
         return Response({"detail": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+# @api_view(['POST'])
+# def delete_cart_item_quantity(request, pk):
+#     try:
+#         cart_item = CartItem.objects.get(id=pk)
+#         if cart_item.quantity > 1:
+#             cart_item.quantity -= 1
+            
+    

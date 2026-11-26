@@ -1,61 +1,25 @@
-const BASE_URL = import.meta.env.VITE_DJANGO_BASE_URL || 'http://localhost:8000';
+﻿const backend = import.meta.env.VITE_DJANGO_BASE_URL || 'http://localhost:8000';
+const base = import.meta.env.DEV ? '' : backend;
 
-export const fetchProducts = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/api/products/`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
-  }
-};
-
-export const fetchCategories = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/api/catagories/`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching catagories:', error);
-    return [];
-  }
-};
-export const product_details = async (id) => {
-  try {
-    const response = await fetch(`${BASE_URL}/api/products/${id}`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return [];
-  }
+export function productImage(path) {
+  if (!path) return 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=600';
+  const url = new URL(path, new URL('/media/', backend));
+  return import.meta.env.DEV && url.pathname.startsWith('/media/') ? url.pathname + url.search : url.href;
 }
 
-export const addProduct = async (product) => {
-  const response = await fetch(`${BASE_URL}/api/add-to-cart/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    body: JSON.stringify({
-      product_id: product.id,
-      quantity: 1,
-    }),
-  });
-
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.detail || 'Could not add product to cart.');
-  }
-
-  return data;
-};
-export const fetchCart = async()=>{
-  const response = await fetch(`${BASE_URL}/api/cart/`, {
-    credentials: 'include',
-  });
-  if (!response.ok) throw new Error('Network response was not ok');
-  return await response.json();
+async function request(path, options) {
+  const response = await fetch(`${base}/api/${path}`, options);
+  if (!response.ok) throw new Error(`Request failed (${response.status}).`);
+  return response.json();
 }
+
+export const fetchProducts = () => request('products/');
+export const fetchCategories = () => request('catagories/');
+export const product_details = (id) => request(`products/${encodeURIComponent(id)}/`);
+export const fetchCart = () => request('cart/', { credentials: 'include' });
+export const addProduct = (product) => request('add-to-cart/', {
+  method: 'POST',
+  credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ product_id: product.id, quantity: 1 }),
+});

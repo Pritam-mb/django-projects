@@ -1,54 +1,33 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { addProduct, product_details } from "../api";
-import {useCart} from "../context/CardContext.jsx";
-export default function Product_detail() {
-    const { addToCart } = useCart();
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [product, setProduct] = useState(null);
+﻿import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { product_details, productImage } from "../api";
+import AddButton from "../components/AddButton";
 
-    useEffect(() => {
-        product_details(id).then(data => setProduct(data))
-    }, [id]);
+export default function ProductDetail() {
+  const { id } = useParams();
+  return <Vehicle key={id} id={id} />;
+}
 
-    if (!product) {
-        return (
-            <div style={{ padding: '60px', color: 'white', backgroundColor: '#0f172a', minHeight: '100vh', display: 'flex', justifyContent: 'center' }}>
-                <h2>Loading premium vehicle...</h2>
+function Vehicle({ id }) {
+  const [product, setProduct] = useState(null);
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    let active = true;
+    product_details(id).then(data => active && setProduct(data)).catch(() => active && setError(true));
+    return () => { active = false; };
+  }, [id]);
+  return (
+    <>
+      <Link className="back" to="/">Back to fleet</Link>
+      {error ? <p role="alert">Could not load this vehicle.</p>
+        : !product ? <p role="status">Loading vehicle…</p>
+        : <article className="detail">
+            <img className="vehicle-photo" src={productImage(product.image)} alt={product.name} />
+            <div><h1>{product.name}</h1><p>{product.description}</p>
+              <p className="rate"><strong>${product.price}</strong> / day</p>
+              <AddButton product={product} />
             </div>
-        );
-    }
-
-    const imageUrl = product.image ? `http://localhost:8000${product.image}` : 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=600';
-const handleAddToCart = (product) => {
-   const pro= addProduct(product);
-   addToCart(product);
-   if(pro){
-    alert(`${product.name} added to cart!`);
-    addpr
-   }else{
-    alert("Could not add product to cart.");
-   }
-  }
-    return (
-        <div style={{ padding: '60px', color: 'white', backgroundColor: '#0f172a', minHeight: '100vh' }}>
-            <button onClick={() => navigate(-1)} style={{ marginBottom: '40px', padding: '10px 20px', cursor: 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: '#fff', fontWeight: 'bold' }}>&larr; Back to Fleet</button>
-
-            <div style={{ display: 'flex', gap: '50px', flexWrap: 'wrap' }}>
-                <img src={`${product.image}`} alt={product.name} style={{ width: '500px', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }} />
-                <div style={{ maxWidth: '600px' }}>
-                    <h1 style={{ fontSize: '3.5rem', margin: '0 0 20px', background: 'linear-gradient(to right, #38bdf8, #818cf8)', WebkitBackgroundClip: 'text', color: 'transparent' }}>{product.name}</h1>
-                    <p style={{ fontSize: '1.2rem', color: '#94a3b8', marginBottom: '30px', lineHeight: '1.6' }}>{product.description}</p>
-                    <h2 style={{ color: '#34d399', fontSize: '2.5rem', margin: '0 0 30px 0' }}>${product.price} <span style={{ fontSize: '1rem', color: '#64748b' }}>/ day</span></h2>
-
-                    <button 
-                    onClick={() => handleAddToCart(product)}
-                    style={{ padding: '15px 40px', fontSize: '1.2rem', background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', transition: 'transform 0.2s', boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)' }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                        add to cart
-                    </button>
-                </div>
-            </div>
-        </div>
-    )
-}                                       
+          </article>}
+    </>
+  );
+}
