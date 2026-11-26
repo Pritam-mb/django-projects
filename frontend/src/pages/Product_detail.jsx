@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { product_details } from "../api";
+import { addProduct, product_details } from "../api";
 
 export default function Product_detail() {
     const { id } = useParams();
@@ -20,7 +20,14 @@ export default function Product_detail() {
     }
 
     const imageUrl = product.image ? `http://localhost:8000${product.image}` : 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=600';
-
+const handleAddToCart = (product) => {
+   const pro= addProduct(product);
+   if(pro){
+    alert(`${product.name} added to cart!`);
+   }else{
+    alert("Could not add product to cart.");
+   }
+  }
     return (
         <div style={{ padding: '60px', color: 'white', backgroundColor: '#0f172a', minHeight: '100vh' }}>
             <button onClick={() => navigate(-1)} style={{ marginBottom: '40px', padding: '10px 20px', cursor: 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: '#fff', fontWeight: 'bold' }}>&larr; Back to Fleet</button>
@@ -32,8 +39,10 @@ export default function Product_detail() {
                     <p style={{ fontSize: '1.2rem', color: '#94a3b8', marginBottom: '30px', lineHeight: '1.6' }}>{product.description}</p>
                     <h2 style={{ color: '#34d399', fontSize: '2.5rem', margin: '0 0 30px 0' }}>${product.price} <span style={{ fontSize: '1rem', color: '#64748b' }}>/ day</span></h2>
 
-                    <button style={{ padding: '15px 40px', fontSize: '1.2rem', background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', transition: 'transform 0.2s', boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)' }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                        Book Now
+                    <button 
+                    onClick={() => handleAddToCart(product)}
+                    style={{ padding: '15px 40px', fontSize: '1.2rem', background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', transition: 'transform 0.2s', boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)' }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                        add to cart
                     </button>
                 </div>
             </div>

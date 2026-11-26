@@ -48,8 +48,9 @@
 
 .card-footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
 }
 
 .card-price {
@@ -58,15 +59,22 @@
   color: #34d399;
 }
 
+.card-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .card-button {
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   border: none;
   border-radius: 8px;
-  padding: 10px 20px;
+  padding: 10px 8px;
   color: white;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
 }
 
 .card-button:hover {
